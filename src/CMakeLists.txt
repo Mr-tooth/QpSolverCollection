@@ -11,12 +11,12 @@ add_library(QpSolverCollection
   QpSolverProxqp.cpp
   QpSolverQpmad.cpp
 )
-
+# Due to the QPSolver JRLQP, the cxx_std must be above 17, otherwise it could be 14
 target_compile_features(QpSolverCollection PUBLIC cxx_std_17)
 
 # This warning is included in the header of qpOASES
-set_source_files_properties(QpSolverQpoases.cpp PROPERTIES
-  COMPILE_FLAGS -Wno-unused-parameter)
+# set_source_files_properties(QpSolverQpoases.cpp PROPERTIES
+#   COMPILE_FLAGS -Wno-unused-parameter)
 
 if(DEFINED CATKIN_DEVEL_PREFIX)
   target_include_directories(QpSolverCollection PUBLIC
@@ -72,6 +72,7 @@ if(${ENABLE_QPOASES})
   if(COMMAND target_link_directories)
     target_link_directories(QpSolverCollection PRIVATE
       ${QPOASES_LIBRARY_DIR})
+    message(STATUS "QPOASES_LIBRARY_DIR is ${QPOASES_LIBRARY_DIR}")
   endif()
   target_link_libraries(QpSolverCollection PRIVATE
     qpOASES)
@@ -96,3 +97,5 @@ if(${ENABLE_QPMAD})
   target_include_directories(QpSolverCollection PRIVATE
     ${qpmad_INCLUDE_DIRS})
 endif()
+
+# 3target_link_options(QpSolverCollection PRIVATE /NODEFAULTLIB:MSVCRT)
